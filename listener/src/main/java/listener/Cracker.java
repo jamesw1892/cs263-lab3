@@ -3,14 +3,15 @@ package listener;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Base64.Decoder;
 
 /**
  * Crack messages in different thread
  */
 public class Cracker implements Runnable {
-    private byte[][] messages;
+    private byte[][] decoded_messages;
     private BigInteger n, g, gc, gs;
-    private Base64.Decoder base64Decoder = new Base64.getDecoder();
+    private Decoder base64Decoder = Base64.getDecoder();
 
     public Cracker(ArrayList<String> messages) {
 
@@ -18,8 +19,8 @@ public class Cracker implements Runnable {
             throw new RuntimeException("Not enough messages sent!");
         }
 
-        this.messages = new byte[messages.size() - 4][];
-        for (int index = 0; index < message.size(); index++) {
+        this.decoded_messages = new byte[messages.size() - 4][];
+        for (int index = 0; index < messages.size(); index++) {
 
             switch (index) {
                 case 0: this.n  = new BigInteger(messages.get(0)); break;
@@ -27,7 +28,7 @@ public class Cracker implements Runnable {
                 case 2: this.gc = new BigInteger(messages.get(2)); break;
                 case 3: this.gs = new BigInteger(messages.get(3)); break;
                 default:
-                    this.messages[index - 4] = base64Decoder.decode(message.get(index));
+                    this.decoded_messages[index - 4] = base64Decoder.decode(messages.get(index));
             }
         }
 
@@ -40,7 +41,8 @@ public class Cracker implements Runnable {
 
     public void bruteForce() {
 
-        BigInteger c, s;
+        BigInteger c = new BigInteger("0");
+        BigInteger s = new BigInteger("0");
 
         BigInteger logInterval = new BigInteger("100");
         BigInteger zero = new BigInteger("0");
@@ -49,7 +51,7 @@ public class Cracker implements Runnable {
         boolean foundS = false;
         BigInteger one = new BigInteger("1");
         BigInteger i = new BigInteger("0");
-        while (!(foundC && foundS)) {
+        while (!(foundC && foundS) && i.compareTo(n) < 0) {
 
             // calc i^g mod n
             BigInteger ans = i.modPow(g, n);
