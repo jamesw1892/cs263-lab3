@@ -4,6 +4,8 @@ My code for lab 3, decrypting traffic caught using a man in the middle attack.
 
 # Ex8
 
+## Initial Ideas
+
 The original man in the middle program prints the intercepted traffic and this is an example of such traffic:
 
 ```
@@ -35,3 +37,15 @@ This looks like Diffie-Hellman-Merkle key exchange as:
 Then they can both calculate `g^(c*s) mod n` which is the symmetric key being used to encrypt all subsequent messages.
 
 These encrypted messages look to be encoded in base 64 (the padding of equals signs at the end gives it away) but they are also encrypted.
+
+In all examples I have seen, `c, s <` the first number which is always smaller than the second number sent. This implies `n` is the first number as `c, s < n`.
+
+## To decrypt
+
+In real life Diffie-Hellman-Merkle use, the prime numbers would be much larger, but with their current size, we can probably brute force the client and server's secret numbers, `c` and `s`, and calculate `g^(c*s) mod n` (the symmetric key ourselves). So we can randomly pick a natural number `p`, calculate `g^p mod n` and compare this to the 3rd and 4th messages until we get a match for both.
+
+# Ex9
+
+## Initial Ideas
+
+Being much longer than the other messages, the 11th encrypted message appears to be data sent from the server to the client. Perhaps the client requested it so maybe we can edit the request to get what we want.

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientConnection implements Runnable {
     private Socket socket;
@@ -31,10 +32,23 @@ public class ClientConnection implements Runnable {
 
             // read messages and try to the pass them on to the actual server
             String inputLine;
+
+            // collect messages in order
+            ArrayList<String> messages = new ArrayList<>();
+
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("[client->server]: " + inputLine);
+
+                // add messages
+                messages.add(inputLine);
+
                 this.serverConnection.getOutToServer().println(inputLine);
             }
+
+            // crack messages in new thread
+            Cracker cracker = new Cracker(messages);
+            Thread crackerThread = new Thread(cracker);
+            crackerThread.start();
         }
         catch (IOException e) {
             System.out.println("Something has gone wrong with the server connection!");
