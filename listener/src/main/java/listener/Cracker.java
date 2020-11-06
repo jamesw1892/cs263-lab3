@@ -2,82 +2,147 @@ package listener;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+class CrackingException extends RuntimeException {
+	public CrackingException(String msg) {
+		super(msg);
+	}
+}
+
 /**
- * Crack messages in different thread
+ * Object to be created in Program.java and passed to both
+ * ClientConnection.java and ServerConnection.java to enable
+ * them to communicate synchronously by saving data here.
+ * 
+ * First it will be used to gather the DHM information.
+ * Once all this is saved, it will crack the DHM key and save that.
+ * Then it will gather the encrypted messages.
+ * Finally, it will decrypt the messages using the DHM key.
  */
-public class Cracker implements Runnable {
-    private byte[][] decoded_messages;
-    private BigInteger n, g, gc, gs;
-    private Decoder base64Decoder = Base64.getDecoder();
+public class Cracker {
+	private BigInteger n, g, gc, gs, key;
+	private ArrayList<String> encryptedMessages;
+	private boolean readyToDecrypt;
+	private Decoder decoder;
 
-    public Cracker(ArrayList<String> messages) {
+	// constants for decryption
+    private static final String CIPHER = "AES";
+	private static final String CIPHER_DETAILS = "AES/ECB/NoPadding";	
+	private static final int KEY_SIZE_BYTES = 16;
 
-        if (messages.size() < 4) {
-            throw new RuntimeException("Not enough messages sent!");
-        }
+    public Cracker() {
+		this.encryptedMessages = new ArrayList<>();
+		this.readyToDecrypt = false;
+		this.decoder = Base64.getDecoder();
+	}
 
-        this.decoded_messages = new byte[messages.size() - 4][];
-        for (int index = 0; index < messages.size(); index++) {
+	public void addEncryptedMessage(String encryptedMessage) {
+		this.encryptedMessages.add(encryptedMessage);
+	}
 
-            switch (index) {
-                case 0: this.n  = new BigInteger(messages.get(0)); break;
-                case 1: this.g  = new BigInteger(messages.get(1)); break;
-                case 2: this.gc = new BigInteger(messages.get(2)); break;
-                case 3: this.gs = new BigInteger(messages.get(3)); break;
-                default:
-                    this.decoded_messages[index - 4] = base64Decoder.decode(messages.get(index));
-            }
-        }
+	public void setN(String n) {
+		this.n = new BigInteger(n);
+	}
 
-        // output known numbers
-        System.out.println("n = " + n);
-        System.out.println("g = " + g);
-        System.out.println("g^c mod n = " + gc);
-        System.out.println("g^s mod n = " + gs);
-    }
+	public void setG(String g) {
+		this.g = new BigInteger(g);
+	}
 
-    public void bruteForce() {
+	public void setGC(String gc) {
+		this.gc = new BigInteger(gc);
+	}
 
-        BigInteger c = new BigInteger("0");
-        BigInteger s = new BigInteger("0");
+	public void setGS(String gs) {
+		this.gs = new BigInteger(gs);
+	}
 
-        BigInteger logInterval = new BigInteger("100");
-        BigInteger zero = new BigInteger("0");
+	public void crackDHM() {
 
-        boolean foundC = false;
-        boolean foundS = false;
-        BigInteger one = new BigInteger("1");
-        BigInteger i = new BigInteger("0");
-        while (!(foundC && foundS) && i.compareTo(n) < 0) {
+		boolean foundC = false;
+		boolean foundS = false;
 
-            // calc i^g mod n
-            BigInteger ans = i.modPow(g, n);
+		BigInteger c = BigInteger.ZERO;
+		BigInteger s = BigInteger.ZERO;
 
-            // compare to c^g mod n and s^g mod n
-            if (ans.equals(gc)) {
-                c = i;
-                foundC = true;
-            } else if (ans.equals(gs)) {
-                s = i;
-                foundS = true;
-            }
+		BigInteger current = BigInteger.ONE;
+		BigInteger ans;
 
-            i.add(one);
-            if (i.remainder(logInterval).equals(zero)) {
-                System.out.println("Got to " + i);
-            }
-        }
+		while (current.compareTo(this.n) <= 0 && (!foundC || !foundS)) {
 
-        System.out.println("s = " + s + ", c = " + c);
+			ans = this.g.modPow(current, this.n);
 
-    }
+			if (ans.equals(this.gc)) {
+				c = new BigInteger(current.toString());
+				foundC = true;
+			} else if (ans.equals(this.gs)) {
+				s = new BigInteger(current.toString());
+				foundS = true;
+			}
 
-    public void run() {
+			current = current.add(BigInteger.ONE);
+		}
 
-        bruteForce();
+		if (c.equals(BigInteger.ZERO)) {
+			throw new CrackingException("Unable to crack DHM");
+		}
 
-    }
+		BigInteger key1 = this.gc.modPow(s, this.n);
+		BigInteger key2 = this.gs.modPow(c, this.n);
+
+		if (key1.equals(key2)) {
+			System.out.println("       [cracker]: Successfully cracked DHM, key = " + key1);
+			this.key = key1;
+		} else {
+			System.out.println(key1);
+			System.out.println(key2);
+			throw new CrackingException("Keys don't match");
+		}
+	}
+
+	public void decryptWhenReady(boolean isClient) {
+		String prefix = isClient ? "Client": "Server";
+		System.out.println("       [cracker]: " + prefix + " is ready to decrypt");
+		if (this.readyToDecrypt) {
+			this.decrypt();
+		} else {
+			this.readyToDecrypt = true;
+		}
+	}
+
+	public void decrypt() {
+
+		// add key to array of correct size, surrounded by zeros
+		byte[] keyBytes = new byte[KEY_SIZE_BYTES];
+		byte[] temp = this.key.toByteArray();
+		System.arraycopy(temp, 0, keyBytes, 0, temp.length);
+
+		// set up cipher
+		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, CIPHER);
+		try {
+			Cipher cipher = Cipher.getInstance(CIPHER_DETAILS);
+			cipher.init(Cipher.DECRYPT_MODE, keySpec);
+
+			System.out.println("       [cracker]: Decrypted messages:");
+
+			for (String encryptedMessage: this.encryptedMessages) {
+
+				// decode the base64-encoded message
+				byte[] encryptedMessageBytes = this.decoder.decode(encryptedMessage);
+
+				// decipher it
+				String msg = new String(cipher.doFinal(encryptedMessageBytes));
+
+				// output it
+				System.out.println(msg);
+			}
+		} catch (Exception e) {
+			throw new CrackingException(e.getMessage());
+		}
+	}
 }

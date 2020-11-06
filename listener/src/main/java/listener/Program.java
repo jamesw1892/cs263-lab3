@@ -144,14 +144,13 @@ public class Program {
 
         try {
 
-            // output everything to file
-            FileWriter fileWriter = new FileWriter("MessageLog.txt", true);
-            PrintWriter logger = new PrintWriter(fileWriter);
+            // create cracker
+            Cracker cracker = new Cracker();
 
             // connect to the actual server
             System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
             Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
-            ServerConnection serverConnection = new ServerConnection(serverSocket, logger);
+            ServerConnection serverConnection = new ServerConnection(serverSocket, cracker);
             Thread serverThread = new Thread(serverConnection);
 
             // listen for incoming connections and accept the first
@@ -159,13 +158,11 @@ public class Program {
             System.out.printf("Student-in-the-middle is listening on port %d...\n", socketForClients.getLocalPort());
             savePort(socketForClients.getLocalPort());
 
-            while(true) {
-                Socket clientSocket = socketForClients.accept();
-                ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection, logger);
-                Thread clientThread = new Thread(clientConnection);
-                clientThread.start();
-                serverThread.start();
-            }
+            Socket clientSocket = socketForClients.accept();
+            ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection, cracker);
+            Thread clientThread = new Thread(clientConnection);
+            clientThread.start();
+            serverThread.start();
         }
         catch (IOException e) {
             System.out.println("Well, something has gone wrong hasn't it:");
