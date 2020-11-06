@@ -30,19 +30,19 @@ The original man in the middle program prints the intercepted traffic and this i
 
 This looks like Diffie-Hellman-Merkle key exchange as:
 
-- The first and second messages are the server sending the client the global variables `g` and `n` (not sure which order)
-- The third message is the client sending the server `g^c mod n` where `c` is the client's secret number
-- The fourth message is the server sending the client `g^s mod n` where `s` is the server's secret number
+- The first and second messages look like the server sending the client the global variables `g` and `n` (not sure which order)
+- The third message looks like the client sending the server `g^c mod n` where `c` is the client's secret number
+- The fourth message looks like the server sending the client `g^s mod n` where `s` is the server's secret number
 
 Then they can both calculate `g^(c*s) mod n` which is the symmetric key being used to encrypt all subsequent messages.
 
-These encrypted messages look to be encoded in base 64 (the padding of equals signs at the end gives it away) but they are also encrypted.
+These encrypted messages look to be encoded in base 64 (the padding of equals signs at the end gives it away), but they are also encrypted.
 
-In all examples I have seen, `c, s <` the first number which is always smaller than the second number sent. This implies `n` is the first number as `c, s < n`.
+In all examples I have seen, `c, s <` the first number which is always smaller than the second number sent. This implies `n` is the first number as `c, s < n` must be true.
 
 ## To decrypt
 
-In real life Diffie-Hellman-Merkle use, the prime numbers would be much larger, but with their current size, we can probably brute force the client and server's secret numbers, `c` and `s`, and calculate `g^(c*s) mod n` (the symmetric key ourselves). So we can randomly pick a natural number `p`, calculate `g^p mod n` and compare this to the 3rd and 4th messages until we get a match for both.
+In real life Diffie-Hellman-Merkle use, the prime numbers would be much larger, but with their current size, we can probably brute force the client and server's secret numbers, `c` and `s`, and calculate `g^(c*s) mod n` (the symmetric key ourselves). So we can pick natural numbers `p`, calculate `g^p mod n` and compare this to the 3rd and 4th messages until we have found `c` and `s`. I have written a python program that does this.
 
 # Ex9
 

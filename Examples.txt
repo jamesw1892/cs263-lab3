@@ -1,0 +1,107 @@
+[server->client]: 2297	n
+[server->client]: 5279	g
+[client->server]: 2205	gc
+[server->client]: 1865	gs
+[server->client]: K/56504XlrtrJ/Z+BMwI+eoGGfNbs5qjMlOxJ4xndgQ=
+[client->server]: O+r2uQT1T7/ZCkN+w2WpKw==
+[client->server]: pKbsyaeTTpOrhhpxXTr8PjE5HCbXWyZKlc4lfipb2Uc=
+[client->server]: vYnI1kWeNnW/T/ybKD5sgA==
+[server->client]: qqS/9o8pqdndEnau8d0UhM+hAwrNt0VDJJLHRsctmJ8=
+[client->server]: zV0f40zMV+0OfDUCqD//VA==
+[server->client]: D1oheIz5OXJYzy8BXazlZkwpnBboxOZWhhKimkt8wAlrCXvOYSyXco/kWReU3LP9
+[client->server]: vYnI1kWeNnW/T/ybKD5sgA==
+[server->client]: qqS/9o8pqdndEnau8d0UhM+hAwrNt0VDJJLHRsctmJ8=
+[client->server]: w73GWtTH1E5ihm7bW8Klgw==
+[server->client]: VBrP2y8j96kXcEtqPsQ0Vy8ceJ6pxYV/BjHDIrfaT0sVXL2Q7roAucjfGhd4co9gPV3aLcRzz+2o/VPz/ySuZ0KDj4upVXfsdMgxOYmvvxk=
+[client->server]: PpTPpvXw2cz0OQ1TFN9t3w==
+[server->client]: W4p/VOKTbKIO0rbb54+dLw==
+
+
+s = 1615
+c = 2027
+
+
+key = 1824
+
+
+
+
+ANOTHER:
+
+
+[server->client]: 7243
+[server->client]: 29
+[client->server]: 7103
+[server->client]: 2392
+[server->client]: R7kODyk0gvcJ961tioc/sbwyk63T59qI2JhPVBnq1/k=
+[client->server]: NxLTj71CzAKJZ1JZXe+Rrg==
+[client->server]: QIZGCd/MG+nohpZvIIbMrNADcN77HftIaWPo7cFcY5s=
+[client->server]: YYX5aq4/FknWxXGlREg+0g==
+[server->client]: UpNcWdW8nNKSqEUwe+uGa1zh8r3JyneBT3IZdt8Kc3g=
+[client->server]: WGYvZnIIcmzBZYaC3smUnw==
+[server->client]: V8jgiztmSZWU99DEvw/lmCP4ex96pPXpewQ0VTZYLpE=
+[client->server]: YYX5aq4/FknWxXGlREg+0g==
+[server->client]: BpYr3wbbgGIm9izj+PX70F3UPYzWOLiycPHEUjlhmFw=
+[client->server]: vN942fVXwrQ6jwEDLE3t2w==
+[server->client]: F2Aj1jb59lM3030zmzxS2yHD43wudfaKABd4LLBWQrV2+1l1H6Xsc2s/V/cBsx5QwZ+joe78x7a8XdjTHhi0rlHRQ1ZfkXgjLAQhksVahcw=
+[client->server]: Ut1K8z3Pv4bd5X6jCizMmg==
+[server->client]: Hl0NuwBaVylZCI6y/zfYmQ==
+
+
+
+[server->client]: 1039
+[server->client]: 6373
+[client->server]: 337
+[server->client]: 132
+[server->client]: hn+cVjoScut8aHVnbSi+t4gk/iradyYjKCM7TJhvfao=
+[client->server]: XKckO8Iex9zc6CfaNg4lWQ==
+[client->server]: pA7Ij31pxpQgvsnpcCtBjGOEgE523wG3gCGbuVtTe20=
+[client->server]: 2ErS4WvbSBTwGowaXrTfeA==
+[server->client]: tzPity/0tv+QqlAlpSpDzL+oaIYKNRNeF8A4Z0Sbero=
+[client->server]: tW6MaogEPL2t+8usLQIGYQ==
+[server->client]: vhcPEkPQVHOgDJePV55xQ8Ne6CNlXAOQ91l8dBvjxho=
+[client->server]: 2ErS4WvbSBTwGowaXrTfeA==
+[server->client]: 8shht0fu3Amosq5s2fgoti0Wt7Awmom5vbpHJupH9H8=
+[client->server]: U8BSRYSEgeuQREB8SNUZjA==
+[server->client]: 9+xWL3sDKitUBHvm4SQbsRJuinhLppJznmvtXKoq2uqmB0yOODk5k27g3KMjFj8QI/mXxdGO0sBSDYsAzTYjBxTgeBAbEcRhkZLc0NkNFkU=
+[client->server]: f87ijVqVQ64xSriL/lG7EQ==
+[server->client]: cJCiXVzQrBSrGdY0ncnaMQ==
+
+
+[server->client]: 487
+[server->client]: 4931
+[client->server]: 280
+[server->client]: 206
+[server->client]: +cD+S+jj6CkT4/1K699YVgr9vBjGp4lwGordglAH18c=
+[client->server]: i7/mEs1SGC67YunWM/m2pw==
+[client->server]: Qg+gr96dXiCgBvt4M+91c4fVVec6lujv5daJUFNR2tk=
+[client->server]: 9X8o/LsJ4WwRSI6POvSCcw==
+[server->client]: m2ZqSEU4dfAHQSryUB5sXzeuWgunK/FztXMwJ1ryc/I=
+[client->server]: Zk382+7iqJuwgnnbyaDsZw==
+[server->client]: jQSLJekaQNM9dhbMVewqORzaoa+TRo0MRnCLZCGZJZ4=
+[client->server]: 9X8o/LsJ4WwRSI6POvSCcw==
+[server->client]: ARiFFTJEMrdzyw979zFj2ZG5rwumwick10Mux7MWEh0=
+[client->server]: HVpzu9m4IdUxrrJHjR34dw==
+[server->client]: Axa6M++VAXo0pLQcg2iyE3QZhjozyN+g6Dt+/d93Q4rps0FpE8fmVC13Rhffv9v+E+zsFF6AFsKqa+XAo6y+QxdftHdnwBP8OFIffpU1pEw=
+[client->server]: q5U7w0umwcd3OOjTfKle/Q==
+[server->client]: cQxksLStR0vE+i4fnZzu6g==
+
+
+
+[server->client]: 5519
+[server->client]: 6323
+[client->server]: 3518
+[server->client]: 216
+[server->client]: kTGF/lPh3X57tXnPHIu/KBK1PH7JtRPcIU/Yw6Fa7iE=
+[client->server]: RzlUWYP6rYjXHIsLdN7mgw==
+[client->server]: TVGHyoxDlsm0WDyik7tVTivbEnYIbDEDcid9WZLVPr4=
+[client->server]: tMOm7Y7fpadYYksNfi3ZrQ==
+[server->client]: abZJYMD/7mY14J3m77T7j82u++DuMbdH/HjQyy7e7kY=
+[client->server]: nWM1/F1Eg6HwiQwwfvdBUQ==
+[server->client]: SER8S6JECCgLUBeiMAyuoDcg7abTx3w7ssnpSELnLxk=
+[client->server]: tMOm7Y7fpadYYksNfi3ZrQ==
+[server->client]: UD8ebgF2JXoG6hhw7mb1HJRHAjGOqhNwTk42Wld9o1c=
+[client->server]: sbL+N3IouJ/NHwXgYIRQ/A==
+[server->client]: 0t8gNApXeYV6B0uY9DmSd/QEHB04zyHYb7XfLhY40affZpLu6W1FbGLbL08VYX6kQ2J5IbjQG73nmXsNQdiRWGoWEmcSRVIqP+covgINThI=
+[client->server]: 5Hkim5mRSaxDk+GSg4PGNA==
+[server->client]: xTCe9yow3pDpA8EAlj37pw==

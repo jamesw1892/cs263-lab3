@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
@@ -142,10 +143,15 @@ public class Program {
         getConfig(args);
 
         try {
+
+            // output everything to file
+            FileWriter fileWriter = new FileWriter("MessageLog.txt", true);
+            PrintWriter logger = new PrintWriter(fileWriter);
+
             // connect to the actual server
             System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
             Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
-            ServerConnection serverConnection = new ServerConnection(serverSocket);
+            ServerConnection serverConnection = new ServerConnection(serverSocket, logger);
             Thread serverThread = new Thread(serverConnection);
 
             // listen for incoming connections and accept the first
@@ -155,7 +161,7 @@ public class Program {
 
             while(true) {
                 Socket clientSocket = socketForClients.accept();
-                ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection);
+                ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection, logger);
                 Thread clientThread = new Thread(clientConnection);
                 clientThread.start();
                 serverThread.start();
