@@ -9,12 +9,6 @@ import java.util.Base64.Decoder;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-class CrackingException extends RuntimeException {
-	public CrackingException(String msg) {
-		super(msg);
-	}
-}
-
 /**
  * Object to be created in Program.java and passed to both
  * ClientConnection.java and ServerConnection.java to enable
@@ -31,10 +25,10 @@ public class Cracker {
 	private boolean readyToDecrypt;
 	private Decoder decoder;
 
-	// constants for decryption
-    private static final String CIPHER = "AES";
-	private static final String CIPHER_DETAILS = "AES/ECB/NoPadding";	
-	private static final int KEY_SIZE_BYTES = 16;
+	// constants for cipher
+    public static final String CIPHER = "AES";
+	public static final String CIPHER_DETAILS = "AES/ECB/NoPadding";	
+	public static final int KEY_SIZE_BYTES = 16;
 
     public Cracker() {
 		this.encryptedMessages = new ArrayList<>();

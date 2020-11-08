@@ -16,7 +16,13 @@ public class Program {
     // the port we should listen on
     private static String portForClients = "0";
     // the port of the server we should connect to
-    private static String portOfActualServer = null; 
+    private static String portOfActualServer = null;
+
+    // whether to crack the existing connection rather than
+    // blocking the client and letting the user input
+    // messages to the server directly using username and
+    // password found by cracking it
+    private static boolean toCrack = false;
 
     /**
      * Tries to load the server's port number from a file.
@@ -72,36 +78,36 @@ public class Program {
         }
 
         // try to parse command-line parameters, these may override 
-        for(int i=0; i<args.length; i++) {
-            if(args[i].equals("--server-port")) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--server-port")) {
                 if(i+1 < args.length) {
                     portOfActualServer = args[i+1];
                 }
                 else {
                     System.err.println("--server-port has no value");
                 }
-            }
-            else if(args[i].equals("--server-host")) {
+            } else if(args[i].equals("--server-host")) {
                 if(i+1 < args.length) {
                     serverHost = args[i+1];
                 }
                 else {
                     System.err.println("--server-host has no value");
                 }
-            }
-            else if(args[i].equals("--listener-port")) {
+            } else if(args[i].equals("--listener-port")) {
                 if(i+1 < args.length) {
                     portForClients = args[i+1];
                 }
                 else {
                     System.err.println("--listener-port has no value");
                 }
+            } else if (args[i].equals("--crack")) {
+                toCrack = true;
             }
         }
-        
+
         // if we still do not have the server's port, let's try to load it
         // from a file
-        if(portOfActualServer == null) {
+        if (portOfActualServer == null) {
             portOfActualServer = loadServerPort();
         }
     }
@@ -138,33 +144,52 @@ public class Program {
         }
     }
 
+    private static void crack() throws IOException {
+
+        // create cracker
+        Cracker cracker = new Cracker();
+
+        // connect to the actual server
+        System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
+        Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
+        ServerConnection serverConnection = new ServerConnection(serverSocket, cracker);
+        Thread serverThread = new Thread(serverConnection);
+
+        // listen for incoming connections and accept the first
+        ServerSocket socketForClients = new ServerSocket(Integer.parseInt(portForClients));
+        System.out.printf("Student-in-the-middle is listening on port %d...\n", socketForClients.getLocalPort());
+        savePort(socketForClients.getLocalPort());
+
+        Socket clientSocket = socketForClients.accept();
+        ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection, cracker);
+        Thread clientThread = new Thread(clientConnection);
+        clientThread.start();
+        serverThread.start();
+    }
+
+    private static void runUserClient() throws IOException {
+
+        System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
+        Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
+        UserClient userClient = new UserClient(serverSocket);
+        Thread serverThread = new Thread(userClient);
+        serverThread.start();
+    }
+
     // the main entry point for this hot mess of an application
     public static void main(String[] args) {        
         getConfig(args);
 
         try {
+            if (toCrack) {
+                crack();
+            } else {
 
-            // create cracker
-            Cracker cracker = new Cracker();
-
-            // connect to the actual server
-            System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
-            Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
-            ServerConnection serverConnection = new ServerConnection(serverSocket, cracker);
-            Thread serverThread = new Thread(serverConnection);
-
-            // listen for incoming connections and accept the first
-            ServerSocket socketForClients = new ServerSocket(Integer.parseInt(portForClients));
-            System.out.printf("Student-in-the-middle is listening on port %d...\n", socketForClients.getLocalPort());
-            savePort(socketForClients.getLocalPort());
-
-            Socket clientSocket = socketForClients.accept();
-            ClientConnection clientConnection = new ClientConnection(clientSocket, serverConnection, cracker);
-            Thread clientThread = new Thread(clientConnection);
-            clientThread.start();
-            serverThread.start();
-        }
-        catch (IOException e) {
+                // instead, block the client and interact with the server directly
+                // with user input after using credentials stolen from client
+                runUserClient();
+            }
+        } catch (IOException e) {
             System.out.println("Well, something has gone wrong hasn't it:");
             System.out.println(e.getMessage());
         }

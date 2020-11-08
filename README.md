@@ -48,26 +48,24 @@ First, I edited `Program.java` to create an instance of my new class `Cracker.ja
 
 ## Cracking AES
 
-Next, I edited the connection classes to add the messages they see to an `ArrayList` in `Cracker.java` and once all have been recieved, call a method to crack it. I guessed that the encryption used for the base64 encoded strings was AES and after lots of asking questions and experimenting, I finally worked out how to extend the DHM key to AES - add it to a `byte[]` of length 16 (the length of the AES key when using 10 rounds). The method then uses that key in AES Electronic Code Book mode with no padding to decrypt the lines. The example above decrypts to this (with newlines removed):
+Next, I edited the connection classes to add the messages they see to an `ArrayList` in `Cracker.java` and once all have been recieved, call a method to crack it. I guessed that the encryption used for the base64 encoded strings was AES and after lots of asking questions and experimenting, I finally worked out how to extend the DHM key to AES - add it to a `byte[]` of length 16 (the length of the AES key when using 10 rounds). The method then uses that key in AES Electronic Code Book mode with no padding to decrypt the lines. The example above decrypts to this (with newlines removed and who they are from added):
 
 ```
-o28uyrhkjnkA12iJKHAL
-LordBalaclava
-Mw3JfcBRA0HyylpIQc0vvQ==
-ls
-cat.txt duck.txt 
-cd pics
-cd: no such file or directory: pics
-ls
-cat.txt duck.txt 
-cat cat.txt
-   |\__/,|   (`\   |o o  |__ _) _.( T   )  `  /((_ `^--' /_<  \`` `-'(((/  (((/
-exit
-logout
+[server->client]: o28uyrhkjnkA12iJKHAL
+[client->server]: LordBalaclava
+[client->server]: Mw3JfcBRA0HyylpIQc0vvQ==
+[client->server]: ls
+[server->client]: cat.txt duck.txt 
+[client->server]: cd pics
+[server->client]: cd: no such file or directory: pics
+[client->server]: ls
+[server->client]: cat.txt duck.txt 
+[client->server]: cat cat.txt
+[server->client]:    |\__/,|   (`\   |o o  |__ _) _.( T   )  `  /((_ `^--' /_<  \`` `-'(((/  (((/
+[client->server]: exit
+[server->client]: logout
 ```
 
 # Ex9
 
-## Initial Ideas
-
-It looks like the intelligence can be retrived through Linux commands to navigate a file system. So I should set up DHM with the server myself, using the (what looks like) username and password we decrypted from the client above. Then I should be able to navigate the file system and find what I'm looking for.
+It looks like the intelligence can be retrived through Linux commands to navigate a file system. So I set up a new server connection where I perform DHM with the server myself then send what looks like the username and password we stole from the client above. Now, I get input from the user (me) to repeatedly send whatever I want to the server and print the response. This should allow me to find the vital intelligence we are looking for.
