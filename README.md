@@ -68,4 +68,41 @@ Next, I edited the connection classes to add the messages they see to an `ArrayL
 
 # Ex9
 
-It looks like the intelligence can be retrived through Linux commands to navigate a file system. So I set up a new server connection where I perform DHM with the server myself then send what looks like the username and password we stole from the client above. Now, I get input from the user (me) to repeatedly send whatever I want to the server and print the response. This should allow me to find the vital intelligence we are looking for.
+It looks like the intelligence can be retrived through Linux commands to navigate a file system. So I set up a new server connection where I perform DHM with the server myself then send what looks like the username and password we stole from the client above. Now, I get input from the user (me) to repeatedly send whatever I want to the server and print the response. This should allow me to find the vital intelligence we are looking for. This is the console after the program exchanged DHM keys and logged in for me. The first command (`ls`) was hard-coded but the rest were input from stdin.
+
+```
+[client->server]: ls
+[server->client]: pics secrets porn 
+Input what to send to server: cd pics
+[server->client]: changed directory to: pics
+Input what to send to server: ls
+[server->client]: cat.txt duck.txt 
+Input what to send to server: cat cat.txt
+[server->client]:    |\__/,|   (`\   |o o  |__ _) _.( T   )  `  /((_ `^--' /_<  \`` `-'(((/  (((/
+Input what to send to server: cat duck.txt
+[server->client]:            ..          ( '`<           )(    ( ----'  '.    (         ;     (_______,'~^~^~^~^~^~^~^~^~^~^~
+Input what to send to server: cd ..
+[server->client]: changed directory to: wmg
+Input what to send to server: cd secrets
+[server->client]: changed directory to: secrets
+Input what to send to server: ls
+[server->client]: imc_access_code idl_cctv_locations wmg_server_ips pitstop_cafe_menu 
+Input what to send to server: cat imc_access_code
+[server->client]: Password123CarpstenWasHere456
+Input what to send to server: cat idl_cctv_locations
+[server->client]: IDL01, IDL03, Carpsten's office
+Input what to send to server: cat wmg_server_ips
+[server->client]: 127.0.0.1, 255.255.255.255, 192.168.0.1
+Input what to send to server: cat pitstop_cafe_menu
+[server->client]: Subsidised chicken korma: 99% cocaine, 1% traces of mechanically seperated chicken
+Input what to send to server: cd ..
+[server->client]: changed directory to: wmg
+Input what to send to server: cd porn
+[server->client]: changed directory to: porn
+Input what to send to server: ls
+[server->client]: bank_account_balance 
+Input what to send to server: cat bank_account_balance
+[server->client]: £9,000,001
+Input what to send to server: exit
+[server->client]: logout
+```

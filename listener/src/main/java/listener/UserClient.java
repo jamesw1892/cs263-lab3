@@ -27,11 +27,16 @@ public class UserClient implements Runnable {
 
     private String encrypt(String message) {
 
-        // encipher
-        byte[] encryptedBytes = this.encipherer.doFinal(message.getBytes());
+        try {
 
-        // encode to base64
-        return this.encoder.encodeToString(encryptedBytes);
+            // encipher
+            byte[] encryptedBytes = this.encipherer.doFinal(message.getBytes());
+            // encode to base64
+            return this.encoder.encodeToString(encryptedBytes);
+
+        } catch (Exception e) {
+            throw new CrackingException(e.getMessage());
+        }
     }
 
     private String decrypt(String encryptedMessageBase64) {
@@ -40,7 +45,11 @@ public class UserClient implements Runnable {
         byte[] encryptedMessageBytes = this.decoder.decode(encryptedMessageBase64);
 
         // decipher
-        return new String(this.decipherer.doFinal(encryptedMessageBytes));
+        try {
+            return new String(this.decipherer.doFinal(encryptedMessageBytes));
+        } catch (Exception e) {
+            throw new CrackingException(e.getMessage());
+        }
     }
 
     private void setUpCipher(BigInteger key) {
@@ -53,10 +62,10 @@ public class UserClient implements Runnable {
 		// set up cipher
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, Cracker.CIPHER);
 		try {
-		    this.encipherer = Cipher.getInstance(Cracker.CIPHER_DETAILS);
+		    this.encipherer = Cipher.getInstance(Cracker.CIPHER);
             this.encipherer.init(Cipher.ENCRYPT_MODE, keySpec);
             
-            this.decipherer = Cipher.getInstance(Cracker.CIPHER_DETAILS);
+            this.decipherer = Cipher.getInstance(Cracker.CIPHER);
             this.decipherer.init(Cipher.DECRYPT_MODE, keySpec);
 
 		} catch (Exception e) {
@@ -97,14 +106,15 @@ public class UserClient implements Runnable {
             // send username, password and first command
             outToServer.println(this.encrypt("LordBalaclava"));
             outToServer.println(this.encrypt("Mw3JfcBRA0HyylpIQc0vvQ=="));
-            outToServer.println(this.encrypt("ls -a"));
+            outToServer.println(this.encrypt("ls"));
+            System.out.println("[client->server]: ls");
 
             // repeatedly print message from server and allow user to respond
             Scanner scanner = new Scanner(System.in);
             String inputLine;
             while ((inputLine = inFromServer.readLine()) != null) {
                 // output messages from server
-                System.out.println("[server->client]: " + inputLine);
+                System.out.println("[server->client]: " + this.decrypt(inputLine));
 
                 // respond with encrypted input from user
                 System.out.print("Input what to send to server: ");

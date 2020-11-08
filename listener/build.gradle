@@ -21,3 +21,7 @@ targetCompatibility = 1.8
 dependencies {
     implementation 'commons-codec:commons-codec:1.8'
 }
+
+run{
+    standardInput = System.in
+}

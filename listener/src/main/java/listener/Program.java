@@ -172,8 +172,7 @@ public class Program {
         System.out.printf("Student-in-the-middle is connecting to server at %s:%s...\n", serverHost, portOfActualServer);
         Socket serverSocket = new Socket(serverHost, Integer.parseInt(portOfActualServer));
         UserClient userClient = new UserClient(serverSocket);
-        Thread serverThread = new Thread(userClient);
-        serverThread.start();
+        userClient.run();
     }
 
     // the main entry point for this hot mess of an application
