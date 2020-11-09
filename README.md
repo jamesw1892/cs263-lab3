@@ -1,6 +1,6 @@
 # Lab 3 of CS263: Cyber Security
 
-My code for lab 3, decrypting traffic caught using a man in the middle attack.
+My code for lab 3, decrypting intercepted traffic and performing a man in the middle attack to steal credentials from a client and information from a server. Tasks in `Tasks.pdf` and solutions in `Solutions.pdf`.
 
 # Ex8
 
@@ -106,3 +106,11 @@ Input what to send to server: cat bank_account_balance
 Input what to send to server: exit
 [server->client]: logout
 ```
+
+# Review with Solutions
+
+Where I broke the DHM key to read messages, the solutions perform DHM with both the server and client individually so they don't have to break it. Both ways succeded but not having to brute force is more elegant. We then both had to figure out how the DHM key was used to decrypt the rest of the traffic.
+
+With the man in the middle DHM system, the solutions passed some traffic through and sent some hard coded commands to navigate the server file system.
+
+For this exercise, my solution was arguably more elegant as the user can input whatever commands they want to navigate the server and see the responses without having to edit code. Whereas in the solutions, we would have had to repeatedly change code, compile, run and see what is returned to know what to add next, until we got the answer.
